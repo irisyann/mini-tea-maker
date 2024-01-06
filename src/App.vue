@@ -128,7 +128,7 @@ export default {
 
   data() {
     return {
-      stepCounter: 7,
+      stepCounter: 0,
       steepTimer: 6,
       sugarAddedMessage: false,
       tooMuchSugarMessage: false,
