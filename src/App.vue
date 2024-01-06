@@ -64,9 +64,9 @@
           <MilkJug />
         </v-btn>
 
-        <SteepTeabag3 v-if="milkCount < 3"/>
-        <WithMilk1 v-if="milkCount >=3 && milkCount < 6"/>
-        <WithMilk2 v-if="milkCount >=6"/>
+        <SteepTeabag3 v-if="milkCount < 1"/>
+        <WithMilk1 v-if="milkCount >=1 && milkCount < 2"/>
+        <WithMilk2 v-if="milkCount >=3"/>
 
         <div v-if="milkAddedMessage" class="mt-5">Milk added!</div>
         <v-sheet v-if="tooMuchMilkMessage" class="mt-5 pa-3 rounded-lg text-red" color="red-lighten-4">
