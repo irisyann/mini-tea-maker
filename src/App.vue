@@ -12,17 +12,17 @@
 
       <div v-if="stepCounter == 1" class="d-flex flex-column align-center">
         <EmptyCup/>
-        <v-btn class="mt-16" @click="stepCounter++">Add water</v-btn>
+        <v-btn color="primary" class="mt-16" @click="stepCounter++">💧 Add water</v-btn>
       </div>
 
       <div v-if="stepCounter == 2" class="d-flex flex-column align-center">
         <CupWithWater/>
-        <v-btn class="mt-16" @click="stepCounter++">Heat up</v-btn>
+        <v-btn color="primary" class="mt-16" @click="stepCounter++">🔥 Heat up</v-btn>
       </div>
 
       <div v-if="stepCounter == 3" class="d-flex flex-column align-center">
         <CupWithBoilingWater/>
-        <v-btn class="mt-16" @click="triggerSteepTimer()">Add tea bag</v-btn>
+        <v-btn color="primary" class="mt-16" @click="triggerSteepTimer()">Add tea bag</v-btn>
       </div>
 
       <div v-if="stepCounter == 4" class="d-flex flex-column align-center">
@@ -30,31 +30,37 @@
         <SteepTeabag2 v-if="steepTimer > 2 && steepTimer <= 4"/>
         <SteepTeabag3 v-if="steepTimer <= 2"/>
         <div class="mt-10" v-if="steepTimer > 0">Steeping tea bag...</div>
-        <v-btn v-if="steepTimer == 0" class="mt-16" @click="stepCounter++">Add sugar</v-btn>
+        <div v-if="steepTimer == 0" class="mt-10">Perfect!</div>
+        <v-btn color="primary" v-if="steepTimer == 0" class="mt-16" @click="stepCounter++">Next</v-btn>
       </div>
 
       <div v-if="stepCounter == 5" class="d-flex flex-column align-center">
         <SteepTeabag3/>
-        <div class="d-flex mt-10">
-          <v-btn class="mr-3" @click="addSugar(1)">
+
+        <div class="mt-10 mb-3 font-weight-bold">🧁 Add sugar</div>
+        <div class="d-flex">
+          <v-btn :disabled="tooMuchSugarMessage" color="primary" class="mr-3" @click="addSugar(1)">
             <SpoonSugar1 />
           </v-btn>
-          <v-btn class="mr-3" @click="addSugar(2)">
+          <v-btn :disabled="tooMuchSugarMessage" color="primary" class="mr-3" @click="addSugar(2)">
             <SpoonSugar2 />
           </v-btn>
-          <v-btn @click="addSugar(3)">
+          <v-btn :disabled="tooMuchSugarMessage" color="primary" @click="addSugar(3)">
             <SpoonSugar3 />
           </v-btn>
         </div>
 
         <div v-if="sugarAddedMessage" class="mt-5">Sugar added!</div>
-        <div v-if="tooMuchSugarMessage" class="mt-5">Whoa that's way too much sugar CALM DOWN</div>
+        <v-sheet v-if="tooMuchSugarMessage" class="mt-5 pa-3 rounded-lg text-red" color="red-lighten-4">
+          <div class="font-italic">Whoa that's way too much sugar CALM DOWN</div>
+        </v-sheet>
 
-        <v-btn class="mt-16" @click="stepCounter++">Add milk</v-btn>
+        <v-btn color="primary" class="mt-16" @click="stepCounter++">Next</v-btn>
       </div>
 
       <div v-if="stepCounter == 6" class="d-flex flex-column align-center">
-        <v-btn class="mt-10 mb-10" height="100px" @click="addMilk()">
+        <div class="mt-2 mb-3 font-weight-bold">🥛 Add milk</div>
+        <v-btn :disabled="tooMuchMilkMessage" color="primary" class="mb-10" height="100px" @click="addMilk()">
           <MilkJug />
         </v-btn>
 
@@ -63,9 +69,11 @@
         <WithMilk2 v-if="milkCount >=6"/>
 
         <div v-if="milkAddedMessage" class="mt-5">Milk added!</div>
-        <div v-if="tooMuchMilkMessage" class="mt-5">All the cows in the world are dried up thanks to you</div>
+        <v-sheet v-if="tooMuchMilkMessage" class="mt-5 pa-3 rounded-lg text-red" color="red-lighten-4">
+          <div class="font-italic">All the cows in the world are dried up thanks to you 🐄</div>
+        </v-sheet>
 
-        <v-btn class="mt-16" @click="stepCounter++">Final step</v-btn>
+        <v-btn color="primary" class="mt-16" @click="stepCounter++">Final step</v-btn>
       </div>
 
       <div v-if="stepCounter == 7" class="d-flex flex-column align-center">
@@ -73,20 +81,20 @@
         <SmokeLines class="mb-2 mr-2"/>
 
         <div style="z-index: 1">
-          <SteepTeabag3 v-if="milkCount < 3"/>
-          <WithMilk1 v-if="milkCount >=3 && milkCount < 6"/>
-          <WithMilk2 v-if="milkCount >=6"/>
+          <SteepTeabag3 v-if="milkCount < 1"/>
+          <WithMilk1 v-if="milkCount >=1 && milkCount < 2"/>
+          <WithMilk2 v-if="milkCount >=3"/>
         </div>
 
         <SaucerPlate class="mr-1 mt-n5"/>
 
         <div class="mt-10 font-weight-bold">Enjoy your tea!</div>
 
-        <v-btn class="mt-16" @click="stepCounter = 1">Start over</v-btn>
+        <v-btn color="primary" class="mt-16" @click="startOver">Start over</v-btn>
       </div>
     </div>
 
-    <v-btn v-if="stepCounter == 0" class="mt-16" @click="stepCounter++">Start</v-btn>
+    <v-btn color="primary" v-if="stepCounter == 0" class="mt-16" @click="stepCounter++">Start</v-btn>
   </div>
 </template>
 
@@ -131,13 +139,26 @@ export default {
       stepCounter: 0,
       steepTimer: 6,
       sugarAddedMessage: false,
+      milkAddedMessage: false,
       tooMuchSugarMessage: false,
+      tooMuchMilkMessage: false,
       sugarCount: 0,
       milkCount: 0,
     }
   },
 
   methods: {
+    startOver() {
+      this.stepCounter = 1
+      this.steepTimer = 6
+      this.sugarAddedMessage = false
+      this.milkAddedMessage = false
+      this.tooMuchSugarMessage = false
+      this.tooMuchMilkMessage = false
+      this.sugarCount = 0
+      this.milkCount = 0
+    },
+
     triggerSteepTimer() {
       this.stepCounter++
       this.steepTimerCountdown()
@@ -167,7 +188,7 @@ export default {
       this.milkAddedMessage = true
       this.milkCount++
 
-      if (this.milkCount > 10) {
+      if (this.milkCount > 5) {
         this.tooMuchMilkMessage = true
       }
 
