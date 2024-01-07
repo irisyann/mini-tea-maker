@@ -1,4 +1,6 @@
-# teamaker
+# Mini Tea Maker
+
+Make your own mini tea! Built with Vue.js
 
 ## Project setup
 ```
